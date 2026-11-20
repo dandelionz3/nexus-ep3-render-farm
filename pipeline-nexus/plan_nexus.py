@@ -8,7 +8,12 @@
 # (pusat y=54, lantai putih, barisan 213 Kairo membeku y 30..73.2).
 # TIDAK ADA flash putih di Ep 3 (berakhir hitam + end card).
 # TIDAK ADA kota aerial di Ep 3.
-# Flag baru: gate_open = 1.0 konstan S1-S8; scar_glow terang (S3+);
+# Flag baru: gate_open = 1.0 S1-S3b + S4-S8, KECUALI 0.0 di S3c (f480-599):
+# kamera 3c ada di DALAM aula menatap balik — panel gerbang opak (5x6 m)
+# menutupi Kairo+EVA kalau tetap 1.0 (temuan tes farm Ronde 1: frame putih
+# polos). Panel disembunyikan tepat di cut 3b->3c, muncul lagi di cut ke S4
+# (kamera S4 membelakangi gerbang — pop tidak terlihat).
+# scar_glow terang (S3+);
 # scar_wave (S6, 0..1 baris demi baris); laser_eva (S1 f0-23) +
 # laser_kairo (S1 f24-71, laser BERGESER); nexus_flicker (S5);
 # kairo213_eyes (S7+); kairo213_step (S8, 0..1); nexus_face (S8).
@@ -241,6 +246,9 @@ for f in range(N):
                         eva=600, eye=300)
         else:
             # 3c: melewati ambang — kamera dari DALAM aula menatap balik ke gerbang
+            # FIX R1: panel gerbang opak HARUS 0 di sini — kalau 1.0, kamera di
+            # dalam aula hanya melihat panel putih polos (Ronde 1: mean 192,3).
+            gate_open = 0.0
             t = seg_t(f, 480, 599)
             kai_y = lerp(17.0, 24.5, smooth(t))
             eva_y = lerp(16.0, 23.5, smooth(t))
@@ -356,7 +364,7 @@ for f in range(N):
             t = seg_t(f, 1056, 1119)
             chars["KAI"] = char(RX, 30.0, 0, rot=0, lean=6, head_tilt=-4, head_turn=0,
                                 armL=5, armR=5, legL=0, legR=0)
-            chars["EVA"] = char(RX + 1.5, 28.5, 0, rot=200, lean=3, head_tilt=4,
+            chars["EVA"] = char(RX + 1.3, 28.5, 0, rot=200, lean=3, head_tilt=4,
                                 armL=5, armR=lerp(5, 55, smooth(t)), legL=0, legR=0)
             chars_cam = cam(lerp(RX + 0.3, RX + 0.15, smooth(t)), lerp(29.6, 29.65, smooth(t)),
                             lerp(1.65, 1.62, smooth(t)),
@@ -365,12 +373,15 @@ for f in range(N):
                         eva=600, hall=300)
         else:
             # 6b: ECU -> wide gelombang cahaya — cahaya biru menyapu aula
+            # FIX R1: kamera TETAP di sisi aula (y 29.6->24.5) — jalur lama
+            # (y 26->20) MENEMBUS panel gerbang opak di y=23.55, frame jadi
+            # putih polos (Ronde 1: mean 214,0). Target tetap barisan (y=35).
             t = seg_t(f, 1120, 1199)
             chars["KAI"] = char(RX, 30.0, 0, rot=0, lean=6, head_tilt=-4, head_turn=0,
                                 armL=5, armR=55, legL=0, legR=0)
-            chars["EVA"] = char(RX + 1.5, 28.5, 0, rot=200, lean=3, head_tilt=4,
+            chars["EVA"] = char(RX + 1.3, 28.5, 0, rot=200, lean=3, head_tilt=4,
                                 armL=5, armR=55, legL=0, legR=0)
-            chars_cam = cam(RX + 0.5, lerp(26.0, 20.0, smooth(t)), lerp(1.6, 3.0, smooth(t)),
+            chars_cam = cam(RX + 0.5, lerp(29.6, 24.5, smooth(t)), lerp(1.62, 3.0, smooth(t)),
                             RX, 35.0, 1.5, lerp(2.8, 15.0, smooth(t)), lerp(62, 48, t))
             li = lights(nexus=0, gate=250, rim=0, fill=150, core=0,
                         eva=lerp(600, 800, smooth(t)), hall=300)
@@ -388,7 +399,7 @@ for f in range(N):
             chars["KAI"] = char(RX, 30.0, 0, rot=0, lean=4, head_tilt=0,
                                 head_turn=lerp(0, 30, smooth(t)),
                                 armL=5, armR=5, legL=0, legR=0)
-            chars["EVA"] = char(RX + 1.5, 28.5, 0, rot=200, lean=2, head_tilt=0,
+            chars["EVA"] = char(RX + 1.3, 28.5, 0, rot=200, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
             chars_cam = cam(lerp(RX + 0.3, RX + 0.15, smooth(t)), lerp(28.5, 27.8, smooth(t)),
                             lerp(1.65, 1.62, smooth(t)),
@@ -400,7 +411,7 @@ for f in range(N):
             t = seg_t(f, 1260, 1319)
             chars["KAI"] = char(RX, 30.0, 0, rot=0, lean=4, head_tilt=0, head_turn=30,
                                 armL=5, armR=5, legL=0, legR=0)
-            chars["EVA"] = char(RX + 1.5, 28.5, 0, rot=200, lean=2, head_tilt=0,
+            chars["EVA"] = char(RX + 1.3, 28.5, 0, rot=200, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
             chars_cam = cam(RX, 24.0, 3.5, RX, 55.0, 1.5, 30.0, 42)
             li = lights(nexus=0, gate=250, rim=0, fill=150, core=0,
@@ -420,9 +431,9 @@ for f in range(N):
             t = seg_t(f, 1320, 1379)
             chars["KAI"] = char(RX, 30.0, 0, rot=180, lean=6, head_tilt=0,
                                 head_turn=30, armL=5, armR=5, legL=0, legR=0)
-            chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
+            chars["EVA"] = char(RX + 1.3, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
-            chars_cam = cam(RX + 0.6, lerp(22.0, 24.0, smooth(t)), lerp(1.3, 1.6, smooth(t)),
+            chars_cam = cam(RX + 0.6, lerp(24.0, 25.0, smooth(t)), lerp(1.3, 1.6, smooth(t)),
                             RX, 45.0, 1.5, 22.0, lerp(50, 48, t))
             li = lights(nexus=200, gate=300, rim=0, fill=150, core=0,
                         eva=800, hall=350)
@@ -431,7 +442,7 @@ for f in range(N):
             t = seg_t(f, 1380, 1439)
             chars["KAI"] = char(RX, 30.0, 0, rot=180, lean=6, head_tilt=0,
                                 head_turn=30, armL=5, armR=5, legL=0, legR=0)
-            chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
+            chars["EVA"] = char(RX + 1.3, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
             chars_cam = cam(RX + 0.6, lerp(24.0, 28.0, smooth(t)), lerp(1.6, 2.5, smooth(t)),
                             RX, 45.0, 1.5, lerp(22.0, 26.0, smooth(t)), lerp(48, 42, t))
@@ -473,7 +484,10 @@ def main():
                for r in rows if any(p not in r["chars"] for p in ALL_CHARS)]
     assert not missing, f"karakter hilang: {missing[:5]}"
     gate = [r["f"] for r in rows if r["gate_open"] > 0]
-    assert gate == list(range(N)), "gate_open harus 1.0 di SEMUA frame"
+    # FIX R1: gate_open 0 HANYA di S3c (480-599, kamera dari dalam aula);
+    # di luar itu 1.0 di semua frame.
+    assert gate == list(range(0, 480)) + list(range(600, N)), \
+        f"gate_open: {gate[:1]}..{gate[-1:]} (harus 0-479 + 600-1439)"
     scar = [r["f"] for r in rows if r["props"]["scar_glow"]]
     assert scar[0] == 288 and scar[-1] == N - 1, f"scar_glow: {scar[0]}-{scar[-1]}"
     laser_e = [r["f"] for r in rows if r["props"]["laser_eva"]]
@@ -496,7 +510,7 @@ def main():
     assert face[0] == 1320 and face[-1] == N - 1, f"nexus_face: {face[0]}-{face[-1]}"
     print(f"CHECK OK: 0 flash, semua {len(rows)} baris punya "
           f"{len(ALL_CHARS)} karakter, 0 frame kosong")
-    print(f"  gate_open=1: {gate[0]}-{gate[-1]} ({len(gate)} frame)")
+    print(f"  gate_open=1: 0-479 + 600-1439 ({len(gate)} frame, 0 di S3c 480-599)")
     print(f"  scar_glow: {scar[0]}-{scar[-1]} ({len(scar)} frame)")
     print(f"  laser_eva: {laser_e[0]}-{laser_e[-1]} | laser_kairo: {laser_k[0]}-{laser_k[-1]}")
     print(f"  scar_wave naik: {wave[0][0]}-{1199} (1.0 sejak f1199)")

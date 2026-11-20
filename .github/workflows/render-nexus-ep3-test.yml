@@ -1,14 +1,16 @@
 name: render-nexus-ep3-test
 
-# Uji 120 frame film NEXUS ZERO Episode 3 "THE CHOICE" (Eevee, setting B7
+# Uji 144 frame film NEXUS ZERO Episode 3 "THE CHOICE" (Eevee, setting B7
 # dengan DEVIASI TERUKUR: samples 6, bukan 8 — sama seperti Ep 1 / Ep 2):
-# RONDE 1: 5 segmen x 24 frame, 20 job x 6 frame
-#   - S1 hook, Blender 1-24 (plan f0-23): gerbang terbuka penuh + wajah NEXUS
-#   - S3 ambang, Blender 540-563 (plan f539-562): Kairo+EVA melewati ambang
-#   - S4 aula pertama, Blender 620-643 (plan f619-642): 213 Kairo beku
-#   - S6 scar_wave, Blender 1160-1183 (plan f1159-1182): gelombang biru
-#   - S8 twist+end, Blender 1380-1403 (plan f1379-1402): 213 mata + langkah + end card
-#   - 9:16 540x960 lensk 0.62 saja.
+# RONDE 2 (pasca Fix Ronde 1): 6 segmen x 24 frame, 24 job x 6 frame
+#   - S3 ambang, Blender 540-563: gerbang 0 di S3c, Kairo+EVA terlihat?
+#   - S4 aula pertama, Blender 620-643: aula putih terang (bukan gelap)?
+#   - S6a ECU sentuhan, Blender 1080-1103: luka tipis + kilau biru + tangan EVA?
+#   - S6b scar_wave, Blender 1160-1183: kamera tetap di aula, gelombang biru?
+#   - S8a langkah, Blender 1321-1344: kamera mulai di aula (bukan putih)?
+#   - S8b akhir, Blender 1416-1439: meredup ke hitam (dim 0.92)?
+#   - 9:16 540x960 lensk 0.62 saja. Ronde 1: 44831399710 (120/120, S1 LOLOS,
+#     S3/S6 putih polos, S4 gelap, S8a belum dites).
 on:
   workflow_dispatch:
 
@@ -20,26 +22,30 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { fmt: "9x16", seg: "s1-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1,    end: 6 }
-          - { fmt: "9x16", seg: "s1-02", res_x: 540, res_y: 960, lensk: "0.62", start: 7,    end: 12 }
-          - { fmt: "9x16", seg: "s1-03", res_x: 540, res_y: 960, lensk: "0.62", start: 13,   end: 18 }
-          - { fmt: "9x16", seg: "s1-04", res_x: 540, res_y: 960, lensk: "0.62", start: 19,   end: 24 }
-          - { fmt: "9x16", seg: "s3-01", res_x: 540, res_y: 960, lensk: "0.62", start: 540,  end: 545 }
-          - { fmt: "9x16", seg: "s3-02", res_x: 540, res_y: 960, lensk: "0.62", start: 546,  end: 551 }
-          - { fmt: "9x16", seg: "s3-03", res_x: 540, res_y: 960, lensk: "0.62", start: 552,  end: 557 }
-          - { fmt: "9x16", seg: "s3-04", res_x: 540, res_y: 960, lensk: "0.62", start: 558,  end: 563 }
-          - { fmt: "9x16", seg: "s4-01", res_x: 540, res_y: 960, lensk: "0.62", start: 620,  end: 625 }
-          - { fmt: "9x16", seg: "s4-02", res_x: 540, res_y: 960, lensk: "0.62", start: 626,  end: 631 }
-          - { fmt: "9x16", seg: "s4-03", res_x: 540, res_y: 960, lensk: "0.62", start: 632,  end: 637 }
-          - { fmt: "9x16", seg: "s4-04", res_x: 540, res_y: 960, lensk: "0.62", start: 638,  end: 643 }
-          - { fmt: "9x16", seg: "s6-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1160, end: 1165 }
-          - { fmt: "9x16", seg: "s6-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1166, end: 1171 }
-          - { fmt: "9x16", seg: "s6-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1172, end: 1177 }
-          - { fmt: "9x16", seg: "s6-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1178, end: 1183 }
-          - { fmt: "9x16", seg: "s8-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1380, end: 1385 }
-          - { fmt: "9x16", seg: "s8-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1386, end: 1391 }
-          - { fmt: "9x16", seg: "s8-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1392, end: 1397 }
-          - { fmt: "9x16", seg: "s8-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1398, end: 1403 }
+          - { fmt: "9x16", seg: "s3-01", res_x: 540, res_y: 960, lensk: "0.62", start: 540, end: 545 }
+          - { fmt: "9x16", seg: "s3-02", res_x: 540, res_y: 960, lensk: "0.62", start: 546, end: 551 }
+          - { fmt: "9x16", seg: "s3-03", res_x: 540, res_y: 960, lensk: "0.62", start: 552, end: 557 }
+          - { fmt: "9x16", seg: "s3-04", res_x: 540, res_y: 960, lensk: "0.62", start: 558, end: 563 }
+          - { fmt: "9x16", seg: "s4-01", res_x: 540, res_y: 960, lensk: "0.62", start: 620, end: 625 }
+          - { fmt: "9x16", seg: "s4-02", res_x: 540, res_y: 960, lensk: "0.62", start: 626, end: 631 }
+          - { fmt: "9x16", seg: "s4-03", res_x: 540, res_y: 960, lensk: "0.62", start: 632, end: 637 }
+          - { fmt: "9x16", seg: "s4-04", res_x: 540, res_y: 960, lensk: "0.62", start: 638, end: 643 }
+          - { fmt: "9x16", seg: "s6a-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1080, end: 1085 }
+          - { fmt: "9x16", seg: "s6a-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1086, end: 1091 }
+          - { fmt: "9x16", seg: "s6a-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1092, end: 1097 }
+          - { fmt: "9x16", seg: "s6a-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1098, end: 1103 }
+          - { fmt: "9x16", seg: "s6b-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1160, end: 1165 }
+          - { fmt: "9x16", seg: "s6b-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1166, end: 1171 }
+          - { fmt: "9x16", seg: "s6b-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1172, end: 1177 }
+          - { fmt: "9x16", seg: "s6b-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1178, end: 1183 }
+          - { fmt: "9x16", seg: "s8a-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1321, end: 1326 }
+          - { fmt: "9x16", seg: "s8a-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1327, end: 1332 }
+          - { fmt: "9x16", seg: "s8a-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1333, end: 1338 }
+          - { fmt: "9x16", seg: "s8a-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1339, end: 1344 }
+          - { fmt: "9x16", seg: "s8b-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1416, end: 1421 }
+          - { fmt: "9x16", seg: "s8b-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1422, end: 1427 }
+          - { fmt: "9x16", seg: "s8b-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1428, end: 1433 }
+          - { fmt: "9x16", seg: "s8b-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1434, end: 1439 }
     env:
       FS_SAMPLES: "6"
       FS_RAY: "0"

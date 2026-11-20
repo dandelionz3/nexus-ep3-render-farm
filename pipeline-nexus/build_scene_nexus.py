@@ -196,6 +196,12 @@ GATE_M = emissive("GateLight", (1.0, 1.0, 0.95), 1.2)  # FIX R1: gerbang harus l
 HALL_FLOOR = mat("HallFloor", (0.92, 0.92, 0.90), 0.15)   # lantai reflektif putih
 HALL_WALL = mat("HallWall", (0.88, 0.88, 0.86), 0.85)     # dinding/kolom putih lembut
 HALL_COL = mat("HallCol", (0.85, 0.85, 0.83), 0.6)
+# FIX R1: dinding/kolom aula tidak kena cahaya langsung (semua lampu aula
+# mengarah sumbu Y) — beri emisi putih lembut 0.25 supaya aula terbaca PUTIH,
+# bukan hitam di paruh atas frame. Lantai sudah terang, tidak perlu emisi.
+for _hw, _hc in ((HALL_WALL, (0.88, 0.88, 0.86)), (HALL_COL, (0.85, 0.85, 0.83))):
+    _hw.node_tree.nodes["Principled BSDF"].inputs["Emission Color"].default_value = (*_hc, 1.0)
+    _hw.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 0.25
 # mata 213 Kairo: gelap (tertutup) sampai S7 — animate menaikkan emisi ke 1.5.
 K213_EYE_M = emissive("K213Eye", (0.30, 0.65, 1.0), 0.0)
 _KB = K213_EYE_M.node_tree.nodes["Principled BSDF"]
@@ -654,11 +660,16 @@ for _idx in range(213):
     _sg.hide_render = True
     K213_SCAR_GLOW.append(_sg)
 # --- wajah NEXUS kecil dari DALAM aula (S8): lebih kecil, lebih jauh, BERKEDIP ---
-# Di luar gerbang (y=20, menghadap +Y ke aula) — terlihat lewat cahaya putih.
-plane("NX_FaceSmall_Glow", (RX, 20.0, 9.0), (4.0, 3.0), NEXUS_GLOW, rot=(math.radians(-90), 0, 0))
-ball("NX_FaceSmall_EyeL", (RX - 0.9, 20.06, 9.5), (0.35, 0.05, 0.22), NEXUS_EYE)
-ball("NX_FaceSmall_EyeR", (RX + 0.9, 20.06, 9.5), (0.35, 0.05, 0.22), NEXUS_EYE)
-block("NX_FaceSmall_Mouth", (RX, 20.06, 8.3), (1.2, 0.04, 0.12), NEXUS_EYE)
+# FIX R1: posisi lama (y=20, di LUAR gerbang di ruang inti) TIDAK PERNAH
+# terlihat — semua kamera S8 ada di sisi aula menatap +Y, wajah itu ada di
+# BELAKANG kamera. Dipindah ke ujung jauh aula (y=68, z=9, menghadap -Y ke
+# arah kamera): dari wide S8 ia terbaca kecil + jauh, berkedip merah di atas
+# barisan — sesuai naskah "lebih kecil, lebih jauh". Hanya muncul di S8
+# (hide_render di-key dari props nexus_face di animate).
+plane("NX_FaceSmall_Glow", (RX, 68.0, 9.0), (4.0, 3.0), NEXUS_GLOW, rot=(math.radians(90), 0, 0))
+ball("NX_FaceSmall_EyeL", (RX - 0.9, 67.94, 9.5), (0.35, 0.05, 0.22), NEXUS_EYE)
+ball("NX_FaceSmall_EyeR", (RX + 0.9, 67.94, 9.5), (0.35, 0.05, 0.22), NEXUS_EYE)
+block("NX_FaceSmall_Mouth", (RX, 67.94, 8.3), (1.2, 0.04, 0.12), NEXUS_EYE)
 NX_FACE_SMALL_OBJS = [bpy.data.objects[n] for n in
                       ("NX_FaceSmall_Glow", "NX_FaceSmall_EyeL",
                        "NX_FaceSmall_EyeR", "NX_FaceSmall_Mouth")]
@@ -696,9 +707,15 @@ point_light("EvaRimCore", (RX + 4, -6, 2.5), (0.30, 0.65, 1.0), 0.0)
 point_light("NexusLight", (RX, 16.0, 10.0), (1.0, 0.08, 0.05), 300.0)
 area_light("GateLight", (RX, 22.5, 3.5), (1.0, 1.0, 0.95), 0.0, 12, (math.radians(90), 0, 0))
 # --- aula memori: cahaya putih lembut merata (jangan blown-out) ---
-area_light("HallLight1", (RX, 40, 12), (1.0, 1.0, 0.98), 300.0, 20, (math.radians(140), 0, 0))
-area_light("HallLight2", (RX, 66, 12), (1.0, 1.0, 0.98), 300.0, 20, (math.radians(140), 0, 0))
-area_light("HallFill", (RX, 54, 6), (0.95, 0.97, 1.0), 150.0, 24, (math.radians(55), 0, 0))
+# FIX R1: lampu area aula terlalu redup untuk ukurannya (300 W / 20x20 m)
+# + dinding samping tidak kena cahaya langsung sama sekali (semua lampu aula
+# mengarah sumbu Y) — langit-langit/dinding atas render HITAM (Ronde 1:
+# S4 mean 78->66, paruh atas frame gelap). Perbaikan: HallLight 300->1200
+# (sorot ke langit-langit), HallFill 150->400, dinding/kolom diberi emisi
+# putih lembut 0.25 supaya terbaca putih apa pun arah cahaya.
+area_light("HallLight1", (RX, 40, 12), (1.0, 1.0, 0.98), 1200.0, 20, (math.radians(140), 0, 0))
+area_light("HallLight2", (RX, 66, 12), (1.0, 1.0, 0.98), 1200.0, 20, (math.radians(140), 0, 0))
+area_light("HallFill", (RX, 54, 6), (0.95, 0.97, 1.0), 400.0, 24, (math.radians(55), 0, 0))
 point_light("HallRedFlicker", (RX, 26, 3.0), (1.0, 0.08, 0.05), 0.0)  # kedip merah S5 dari ambang
 point_light("EvaRimHall", (RX, 30, 2.5), (0.30, 0.65, 1.0), 0.0)
 # glow mata Sentinel ECU (S1/S2) — ikut rig kepala SEN1 di animate
