@@ -348,17 +348,18 @@ for f in range(N):
                         eva=400, hall=300, hallred=hr)
         else:
             # 5c: close Kairo + EVA di tengah kedip — setengah putih setengah merah
-            # FIX R4: kamera lama (81, 28) = 1,1 m dari wajah Kairo — wajah
-            # terpotong tepi kiri, EVA 50° di luar frame (Ronde 5). Kamera
-            # mundur ke (81, 24,5), target titik tengah (81, 29, 1,5),
-            # fokus 4,5 m = jarak ke titik tengah; kedua karakter masuk
-            # (Kairo 4,12 m, EVA 4,61 m, DOF ~3,9-5,3 m).
+            # FIX R5: lensa 62 di 4,5 m = frame 2,7 m — pasangan 2,24 m apart
+            # jatuh di TEPI frame, Kairo terpotong setengah (Ronde 6). Lensa
+            # 46 (frame ~3,8 m di 4,5 m): keduanya utuh + margin 0,5 m.
+            # Sudut dari belakang dipertahankan: kedip merah menyorot punggung
+            # mereka (sisi menghadap kamera); dari depan malah punggung yang
+            # merah, wajah putih saja.
             t = seg_t(f, 1008, 1055)
             chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=4, head_tilt=-10,
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
-            chars_cam = cam(RX + 1.0, 24.5, 1.6, RX + 1.0, 29.0, 1.5, 4.5, 62)
+            chars_cam = cam(RX + 1.0, 24.5, 1.6, RX + 1.0, 29.0, 1.5, 4.5, 46)
             hr = 800 if (f // 3) % 2 == 0 else 150
             li = lights(nexus=500, gate=250, rim=0, fill=150, core=0,
                         eva=400, hall=280, hallred=hr)

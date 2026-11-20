@@ -1,13 +1,11 @@
 name: render-nexus-ep3-test
 
-# Uji 48 frame film NEXUS ZERO Episode 3 "THE CHOICE" (Eevee, setting B7
+# Uji 24 frame film NEXUS ZERO Episode 3 "THE CHOICE" (Eevee, setting B7
 # dengan DEVIASI TERUKUR: samples 6, bukan 8 — sama seperti Ep 1 / Ep 2):
-# RONDE 6 (mini, Fix Ronde 4): 2 segmen x 24 frame, 8 job x 6 frame
-#   - S5a tilt-up, Blender 880-903: kamera y 30 -> 29 (di depan baris 0,
-#     tidak lagi di dalam K213_009 — Ronde 5 frame awal hitam)
-#   - S5c two-shot, Blender 1020-1043: kamera mundur ke y 24,5, target
-#     titik tengah, fokus 4,5 m (Ronde 5: Kairo terpotong, EVA di luar)
-#   - 9:16 540x960 lensk 0.62 saja. Ronde 5: 44836499875 (48/48, S5a + S5c GAGAL).
+# RONDE 7 (mini, Fix Ronde 5): 1 segmen x 24 frame, 4 job x 6 frame
+#   - S5c two-shot, Blender 1020-1043: lensa 62 -> 46 (keduanya utuh,
+#     Ronde 6 Kairo terpotong di tepi kiri)
+#   - 9:16 540x960 lensk 0.62 saja. Ronde 6: 44837191411 (48/48, S5a LOLOS, S5c framing).
 on:
   workflow_dispatch:
 
@@ -19,10 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { fmt: "9x16", seg: "s5a-01", res_x: 540, res_y: 960, lensk: "0.62", start: 880, end: 885 }
-          - { fmt: "9x16", seg: "s5a-02", res_x: 540, res_y: 960, lensk: "0.62", start: 886, end: 891 }
-          - { fmt: "9x16", seg: "s5a-03", res_x: 540, res_y: 960, lensk: "0.62", start: 892, end: 897 }
-          - { fmt: "9x16", seg: "s5a-04", res_x: 540, res_y: 960, lensk: "0.62", start: 898, end: 903 }
           - { fmt: "9x16", seg: "s5c-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1020, end: 1025 }
           - { fmt: "9x16", seg: "s5c-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1026, end: 1031 }
           - { fmt: "9x16", seg: "s5c-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1032, end: 1037 }
