@@ -1,13 +1,12 @@
 name: render-nexus-ep3-test
 
-# Uji 72 frame film NEXUS ZERO Episode 3 "THE CHOICE" (Eevee, setting B7
+# Uji 48 frame film NEXUS ZERO Episode 3 "THE CHOICE" (Eevee, setting B7
 # dengan DEVIASI TERUKUR: samples 6, bukan 8 — sama seperti Ep 1 / Ep 2):
-# RONDE 4 (mini, segmen yang belum pernah dites): 3 segmen x 24 frame,
-# 12 job x 6 frame
-#   - S2b denyut gerbang, Blender 150-173: putih vs merah satu frame?
-#   - S5a tilt-up ke ambang, Blender 880-903: gerbang putih + kedip merah?
-#   - S5b wide kedip, Blender 960-983: dinding putih berkedip merah?
-#   - 9:16 540x960 lensk 0.62 saja. Ronde 3: 44834513493 (144/144, semua LOLOS).
+# RONDE 5 (mini, Fix Ronde 3): 2 segmen x 24 frame, 8 job x 6 frame
+#   - S5a tilt-up, Blender 880-903: kamera geser +3 m (tidak lagi di
+#     belakang Kairo — Ronde 4 frame blur/blocked)
+#   - S5c close Kairo+EVA, Blender 1020-1043: fokus 3,0 -> 1,5 m
+#   - 9:16 540x960 lensk 0.62 saja. Ronde 4: 44835630024 (72/72, S5a GAGAL).
 on:
   workflow_dispatch:
 
@@ -19,18 +18,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { fmt: "9x16", seg: "s2b-01", res_x: 540, res_y: 960, lensk: "0.62", start: 150, end: 155 }
-          - { fmt: "9x16", seg: "s2b-02", res_x: 540, res_y: 960, lensk: "0.62", start: 156, end: 161 }
-          - { fmt: "9x16", seg: "s2b-03", res_x: 540, res_y: 960, lensk: "0.62", start: 162, end: 167 }
-          - { fmt: "9x16", seg: "s2b-04", res_x: 540, res_y: 960, lensk: "0.62", start: 168, end: 173 }
           - { fmt: "9x16", seg: "s5a-01", res_x: 540, res_y: 960, lensk: "0.62", start: 880, end: 885 }
           - { fmt: "9x16", seg: "s5a-02", res_x: 540, res_y: 960, lensk: "0.62", start: 886, end: 891 }
           - { fmt: "9x16", seg: "s5a-03", res_x: 540, res_y: 960, lensk: "0.62", start: 892, end: 897 }
           - { fmt: "9x16", seg: "s5a-04", res_x: 540, res_y: 960, lensk: "0.62", start: 898, end: 903 }
-          - { fmt: "9x16", seg: "s5b-01", res_x: 540, res_y: 960, lensk: "0.62", start: 960, end: 965 }
-          - { fmt: "9x16", seg: "s5b-02", res_x: 540, res_y: 960, lensk: "0.62", start: 966, end: 971 }
-          - { fmt: "9x16", seg: "s5b-03", res_x: 540, res_y: 960, lensk: "0.62", start: 972, end: 977 }
-          - { fmt: "9x16", seg: "s5b-04", res_x: 540, res_y: 960, lensk: "0.62", start: 978, end: 983 }
+          - { fmt: "9x16", seg: "s5c-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1020, end: 1025 }
+          - { fmt: "9x16", seg: "s5c-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1026, end: 1031 }
+          - { fmt: "9x16", seg: "s5c-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1032, end: 1037 }
+          - { fmt: "9x16", seg: "s5c-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1038, end: 1043 }
     env:
       FS_SAMPLES: "6"
       FS_RAY: "0"
