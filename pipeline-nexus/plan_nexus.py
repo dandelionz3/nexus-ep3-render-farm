@@ -321,16 +321,16 @@ for f in range(N):
         nexus_flicker = True  # kedip merah merayap dari ambang
         if f < 936:
             # 5a: tilt-up dari lantai aula ke ambang — dinding mulai berkedip merah
-            # FIX R3: kamera lama di (RX, 30, z) = TEPAT di belakang Kairo
-            # (80, 28,5) — badannya memblokir tilt-up (frame blur biru-abu /
-            # putih polos, Ronde 4). Kamera geser +3 m ke samping (RX+3) supaya
-            # gerbang bersih di frame; Kairo/EVA di tepi kiri.
+            # FIX R4: kamera (RX+3, 30) TEPAT di posisi K213_009 (83, 30) —
+            # grid K213 x step 3 m, baris 0 y=30; kamera di DALAM duplikat
+            # (frame awal hitam, Ronde 5). Geser maju 1 m (y=29): di depan
+            # baris 0 + hero (28,5), jalur ke gerbang bersih.
             t = seg_t(f, 864, 935)
             chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=4, head_tilt=lerp(0, -10, smooth(t)),
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
-            chars_cam = cam(RX + 3.0, 30.0, lerp(1.0, 3.0, smooth(t)),
+            chars_cam = cam(RX + 3.0, 29.0, lerp(1.0, 3.0, smooth(t)),
                             RX, 24.0, lerp(1.5, 6.0, smooth(t)), 8.0, 50, roll=9)
             hr = 900 if (f // 6) % 2 == 0 else 100
             li = lights(nexus=300, gate=250, rim=0, fill=150, core=0,
@@ -348,14 +348,17 @@ for f in range(N):
                         eva=400, hall=300, hallred=hr)
         else:
             # 5c: close Kairo + EVA di tengah kedip — setengah putih setengah merah
-            # FIX R3: fokus lama 3,0 — subjek di 1,1-1,8 m dari kamera (lensa 62,
-            # f/2,0) = wajah blur. Fokus 1,5 m (tengah Kairo 1,12 / EVA 1,8).
+            # FIX R4: kamera lama (81, 28) = 1,1 m dari wajah Kairo — wajah
+            # terpotong tepi kiri, EVA 50° di luar frame (Ronde 5). Kamera
+            # mundur ke (81, 24,5), target titik tengah (81, 29, 1,5),
+            # fokus 4,5 m = jarak ke titik tengah; kedua karakter masuk
+            # (Kairo 4,12 m, EVA 4,61 m, DOF ~3,9-5,3 m).
             t = seg_t(f, 1008, 1055)
             chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=4, head_tilt=-10,
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
-            chars_cam = cam(RX + 1.0, 28.0, 1.6, RX + 0.5, 30.0, 1.5, 1.5, 62)
+            chars_cam = cam(RX + 1.0, 24.5, 1.6, RX + 1.0, 29.0, 1.5, 4.5, 62)
             hr = 800 if (f // 3) % 2 == 0 else 150
             li = lights(nexus=500, gate=250, rim=0, fill=150, core=0,
                         eva=400, hall=280, hallred=hr)

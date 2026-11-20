@@ -2,11 +2,12 @@ name: render-nexus-ep3-test
 
 # Uji 48 frame film NEXUS ZERO Episode 3 "THE CHOICE" (Eevee, setting B7
 # dengan DEVIASI TERUKUR: samples 6, bukan 8 — sama seperti Ep 1 / Ep 2):
-# RONDE 5 (mini, Fix Ronde 3): 2 segmen x 24 frame, 8 job x 6 frame
-#   - S5a tilt-up, Blender 880-903: kamera geser +3 m (tidak lagi di
-#     belakang Kairo — Ronde 4 frame blur/blocked)
-#   - S5c close Kairo+EVA, Blender 1020-1043: fokus 3,0 -> 1,5 m
-#   - 9:16 540x960 lensk 0.62 saja. Ronde 4: 44835630024 (72/72, S5a GAGAL).
+# RONDE 6 (mini, Fix Ronde 4): 2 segmen x 24 frame, 8 job x 6 frame
+#   - S5a tilt-up, Blender 880-903: kamera y 30 -> 29 (di depan baris 0,
+#     tidak lagi di dalam K213_009 — Ronde 5 frame awal hitam)
+#   - S5c two-shot, Blender 1020-1043: kamera mundur ke y 24,5, target
+#     titik tengah, fokus 4,5 m (Ronde 5: Kairo terpotong, EVA di luar)
+#   - 9:16 540x960 lensk 0.62 saja. Ronde 5: 44836499875 (48/48, S5a + S5c GAGAL).
 on:
   workflow_dispatch:
 
