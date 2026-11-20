@@ -124,6 +124,7 @@ for f in range(N):
              "gate": True, "scar_glow": False, "laser_eva": False,
              "laser_kairo": False, "nexus_face": False, "kairo213_eyes": False}
     gate_open = 1.0
+    wall_emit = 0.25  # emisi dinding/kolom aula (FIX R1: aula terbaca putih)
     nexus_flicker = False
     scar_wave = 0.0
     kairo213_step = 0.0
@@ -287,7 +288,7 @@ for f in range(N):
         elif f < 768:
             # 4b: dolly menyusuri barisan — Kairo berjalan pelan di antara mereka
             t = seg_t(f, 672, 767)
-            kai_y = lerp(26.0, 30.0, smooth(t))
+            kai_y = lerp(26.0, 28.5, smooth(t))
             ph = f * 0.30
             c = walk_cycle(ph, 18)
             chars["KAI"] = char(RX, kai_y, c["bob"], rot=180, lean=5, head_tilt=0,
@@ -303,7 +304,7 @@ for f in range(N):
         else:
             # 4c: wide aula — Kairo kecil di antara barisan yang memudar ke putih
             t = seg_t(f, 768, 863)
-            chars["KAI"] = char(RX, 30.0, 0, rot=180, lean=4, head_tilt=0,
+            chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=4, head_tilt=0,
                                 head_turn=lerp(0, 30, smooth(t)),
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
@@ -321,7 +322,7 @@ for f in range(N):
         if f < 936:
             # 5a: tilt-up dari lantai aula ke ambang — dinding mulai berkedip merah
             t = seg_t(f, 864, 935)
-            chars["KAI"] = char(RX, 30.0, 0, rot=180, lean=4, head_tilt=lerp(0, -10, smooth(t)),
+            chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=4, head_tilt=lerp(0, -10, smooth(t)),
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
@@ -333,7 +334,7 @@ for f in range(N):
         elif f < 1008:
             # 5b: wide aula — kedip merah menyebar, 213 Kairo BELUM bergerak
             t = seg_t(f, 936, 1007)
-            chars["KAI"] = char(RX, 30.0, 0, rot=180, lean=4, head_tilt=-10,
+            chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=4, head_tilt=-10,
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
@@ -344,7 +345,7 @@ for f in range(N):
         else:
             # 5c: close Kairo + EVA di tengah kedip — setengah putih setengah merah
             t = seg_t(f, 1008, 1055)
-            chars["KAI"] = char(RX, 30.0, 0, rot=180, lean=4, head_tilt=-10,
+            chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=4, head_tilt=-10,
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 2.0, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
@@ -361,14 +362,18 @@ for f in range(N):
         scar_wave = smooth(seg_t(f, 1056, 1199))  # cahaya menjalar baris demi baris
         if f < 1120:
             # 6a: ECU bekas luka — EVA MENYENTUH (pertama kalinya)
+            # FIX R2: kamera lama 0,4 m dari wajah (fokus 2,6 m) = blur total
+            # f/2.0 (Ronde 2). Kamera mundur ke 2,5 m + fokus = jarak (2,5).
+            # EVA mendekat ke (RX+0,6, 28,2) khusus 6a supaya tangan terangkatnya
+            # masuk frame kanan (posisi lama 1,5 m tidak terjangkau lengannya).
             t = seg_t(f, 1056, 1119)
-            chars["KAI"] = char(RX, 30.0, 0, rot=0, lean=6, head_tilt=-4, head_turn=0,
+            chars["KAI"] = char(RX, 28.5, 0, rot=0, lean=6, head_tilt=-4, head_turn=0,
                                 armL=5, armR=5, legL=0, legR=0)
-            chars["EVA"] = char(RX + 1.3, 28.5, 0, rot=200, lean=3, head_tilt=4,
+            chars["EVA"] = char(RX + 0.6, 28.2, 0, rot=200, lean=3, head_tilt=4,
                                 armL=5, armR=lerp(5, 55, smooth(t)), legL=0, legR=0)
-            chars_cam = cam(lerp(RX + 0.3, RX + 0.15, smooth(t)), lerp(29.6, 29.65, smooth(t)),
+            chars_cam = cam(lerp(RX + 0.3, RX + 0.15, smooth(t)), lerp(26.0, 26.1, smooth(t)),
                             lerp(1.65, 1.62, smooth(t)),
-                            RX, 30.0, 1.6, lerp(2.6, 2.3, smooth(t)), lerp(75, 85, t))
+                            RX, 28.5, 1.6, lerp(2.5, 2.4, smooth(t)), lerp(75, 85, t))
             li = lights(nexus=0, gate=250, rim=0, fill=150, core=0,
                         eva=600, hall=300)
         else:
@@ -377,7 +382,7 @@ for f in range(N):
             # (y 26->20) MENEMBUS panel gerbang opak di y=23.55, frame jadi
             # putih polos (Ronde 1: mean 214,0). Target tetap barisan (y=35).
             t = seg_t(f, 1120, 1199)
-            chars["KAI"] = char(RX, 30.0, 0, rot=0, lean=6, head_tilt=-4, head_turn=0,
+            chars["KAI"] = char(RX, 28.5, 0, rot=0, lean=6, head_tilt=-4, head_turn=0,
                                 armL=5, armR=55, legL=0, legR=0)
             chars["EVA"] = char(RX + 1.3, 28.5, 0, rot=200, lean=3, head_tilt=4,
                                 armL=5, armR=55, legL=0, legR=0)
@@ -395,21 +400,24 @@ for f in range(N):
         scar_wave = 1.0  # gelombang selesai; semua bekas luka menyala
         if f < 1260:
             # 7a: dolly-in ke mata Kairo -> ECU
+            # FIX R2: fokus lama 2,6->1,8 berlawanan arah dengan jarak
+            # (1,53->2,21 m) — f/2.0 jadi blur. Fokus kini = jarak (1,55->2,2);
+            # kamera digeser supaya jaraknya 1,5->2,2 m dari wajah (hero di 28,5).
             t = seg_t(f, 1200, 1259)
-            chars["KAI"] = char(RX, 30.0, 0, rot=0, lean=4, head_tilt=0,
+            chars["KAI"] = char(RX, 28.5, 0, rot=0, lean=4, head_tilt=0,
                                 head_turn=lerp(0, 30, smooth(t)),
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 1.3, 28.5, 0, rot=200, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
-            chars_cam = cam(lerp(RX + 0.3, RX + 0.15, smooth(t)), lerp(28.5, 27.8, smooth(t)),
+            chars_cam = cam(lerp(RX + 0.3, RX + 0.15, smooth(t)), lerp(27.0, 26.3, smooth(t)),
                             lerp(1.65, 1.62, smooth(t)),
-                            RX, 30.0, 1.55, lerp(2.6, 1.8, smooth(t)), lerp(70, 85, t))
+                            RX, 28.5, 1.55, lerp(1.55, 2.2, smooth(t)), lerp(70, 85, t))
             li = lights(nexus=0, gate=250, rim=0, fill=150, core=0,
                         eva=700, hall=320)
         else:
             # 7b: wide aula — semua mata terbuka, aula berubah biru
             t = seg_t(f, 1260, 1319)
-            chars["KAI"] = char(RX, 30.0, 0, rot=0, lean=4, head_tilt=0, head_turn=30,
+            chars["KAI"] = char(RX, 28.5, 0, rot=0, lean=4, head_tilt=0, head_turn=30,
                                 armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 1.3, 28.5, 0, rot=200, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
@@ -429,7 +437,7 @@ for f in range(N):
         if f < 1380:
             # 8a: wide hero — 213 Kairo melangkah serentak ke arah ambang
             t = seg_t(f, 1320, 1379)
-            chars["KAI"] = char(RX, 30.0, 0, rot=180, lean=6, head_tilt=0,
+            chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=6, head_tilt=0,
                                 head_turn=30, armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 1.3, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
@@ -440,7 +448,7 @@ for f in range(N):
         else:
             # 8b: pull-back lambat -> hitam + end card (f1380-1439, ASS)
             t = seg_t(f, 1380, 1439)
-            chars["KAI"] = char(RX, 30.0, 0, rot=180, lean=6, head_tilt=0,
+            chars["KAI"] = char(RX, 28.5, 0, rot=180, lean=6, head_tilt=0,
                                 head_turn=30, armL=5, armR=5, legL=0, legR=0)
             chars["EVA"] = char(RX + 1.3, 29.5, 0, rot=180, lean=2, head_tilt=0,
                                 armL=5, armR=5, legL=0, legR=0)
@@ -448,6 +456,9 @@ for f in range(N):
                             RX, 45.0, 1.5, lerp(22.0, 26.0, smooth(t)), lerp(48, 42, t))
             # aula meredup menuju hitam (end card di atas hitam)
             dim = 1.0 - 0.92 * smooth(seg_t(f, 1400, 1439))
+            # FIX R2: emisi dinding 0,25 TIDAK ikut dim lampu — tanpa ini akhir
+            # film mentok mean ~86 (abu-abu, bukan hitam). Ikutkan dim ke emisi.
+            wall_emit = 0.25 * dim
             li = lights(nexus=200 * dim, gate=300 * dim, rim=0, fill=150 * dim,
                         core=0, eva=800 * dim, hall=350 * dim)
         for _p in ("SEN1", "SEN2", "SEN3", "SEN4", "SEN5", "SEN6", "SEN7", "SEN8",
@@ -461,7 +472,8 @@ for f in range(N):
 
     rows.append({"f": f, "t": round(f / 24.0, 4), "chars": chars, "lights": li,
                  "cam": chars_cam, "props": props, "flash_white": flash_white,
-                 "gate_open": round(gate_open, 3), "nexus_flicker": bool(nexus_flicker),
+                 "gate_open": round(gate_open, 3), "wall_emit": round(wall_emit, 4),
+                 "nexus_flicker": bool(nexus_flicker),
                  "scar_wave": round(scar_wave, 3),
                  "kairo213_step": round(kairo213_step, 3)})
 
@@ -508,6 +520,9 @@ def main():
     assert rows[1439]["kairo213_step"] == 1.0
     face = [r["f"] for r in rows if r["props"]["nexus_face"]]
     assert face[0] == 1320 and face[-1] == N - 1, f"nexus_face: {face[0]}-{face[-1]}"
+    # FIX R2: emisi dinding 0.25 di semua frame, meredup bersama dim 8b.
+    assert rows[0]["wall_emit"] == 0.25 and rows[1399]["wall_emit"] == 0.25
+    assert rows[1439]["wall_emit"] == 0.02, f"wall_emit akhir: {rows[1439]['wall_emit']}"
     print(f"CHECK OK: 0 flash, semua {len(rows)} baris punya "
           f"{len(ALL_CHARS)} karakter, 0 frame kosong")
     print(f"  gate_open=1: 0-479 + 600-1439 ({len(gate)} frame, 0 di S3c 480-599)")

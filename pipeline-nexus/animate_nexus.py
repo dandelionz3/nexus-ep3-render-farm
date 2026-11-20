@@ -162,6 +162,15 @@ _eye_bsdf.inputs["Emission Strength"].default_value = (
     1.5 if _row_start["props"].get("kairo213_eyes") else 0.0)
 _eye_bsdf.inputs["Emission Strength"].keyframe_insert("default_value", frame=START)
 _last_eyes = bool(_row_start["props"].get("kairo213_eyes"))
+# emisi dinding/kolom aula: 0.25 (putih), meredup bersama dim 8b (FIX R2) —
+# tanpa ini akhir film mentok abu-abu (emisi tidak ikut dim lampu).
+_wall_bsdfs = [bpy.data.materials[_m].node_tree.nodes["Principled BSDF"]
+               for _m in ("HallWall", "HallCol")]
+_wall0 = _row_start.get("wall_emit", 0.25)
+for _wb in _wall_bsdfs:
+    _wb.inputs["Emission Strength"].default_value = _wall0
+    _wb.inputs["Emission Strength"].keyframe_insert("default_value", frame=START)
+_last_wall = _wall0
 # langkah serentak: posisi instance sesuai step di START
 _step0 = _row_start.get("kairo213_step", 0.0)
 for _nm, (_bx, _by, _bz) in K213_BASE.items():
@@ -289,6 +298,13 @@ for row in plan:
     _gate = objs["NX_Gate"]
     _gate.scale = (max(_go, 0.0), 1.0, 1.0)
     _gate.keyframe_insert("scale", frame=fr)
+    # Ep 3: emisi dinding aula ikut dim 8b (FIX R2) — key hanya saat berubah.
+    _we = row.get("wall_emit", 0.25)
+    if _we != _last_wall:
+        _last_wall = _we
+        for _wb in _wall_bsdfs:
+            _wb.inputs["Emission Strength"].default_value = _we
+            _wb.inputs["Emission Strength"].keyframe_insert("default_value", frame=fr)
     # Ep 3: SATU LANGKAH serentak S8 — key hanya di ujung ramp (1320 & 1379),
     # interpolasi LINEAR menggeser semua 213 instans -Y 0.35 m ke arah ambang.
     if fr in (1320, 1379):

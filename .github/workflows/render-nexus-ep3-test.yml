@@ -2,15 +2,16 @@ name: render-nexus-ep3-test
 
 # Uji 144 frame film NEXUS ZERO Episode 3 "THE CHOICE" (Eevee, setting B7
 # dengan DEVIASI TERUKUR: samples 6, bukan 8 — sama seperti Ep 1 / Ep 2):
-# RONDE 2 (pasca Fix Ronde 1): 6 segmen x 24 frame, 24 job x 6 frame
-#   - S3 ambang, Blender 540-563: gerbang 0 di S3c, Kairo+EVA terlihat?
-#   - S4 aula pertama, Blender 620-643: aula putih terang (bukan gelap)?
-#   - S6a ECU sentuhan, Blender 1080-1103: luka tipis + kilau biru + tangan EVA?
-#   - S6b scar_wave, Blender 1160-1183: kamera tetap di aula, gelombang biru?
-#   - S8a langkah, Blender 1321-1344: kamera mulai di aula (bukan putih)?
-#   - S8b akhir, Blender 1416-1439: meredup ke hitam (dim 0.92)?
-#   - 9:16 540x960 lensk 0.62 saja. Ronde 1: 44831399710 (120/120, S1 LOLOS,
-#     S3/S6 putih polos, S4 gelap, S8a belum dites).
+# RONDE 3 (pasca Fix Ronde 2): 6 segmen x 24 frame, 24 job x 6 frame
+#   - S4c wide, Blender 800-823: hero di y=28,5 terpisah dari duplikat?
+#   - S6a ECU sentuhan, Blender 1080-1103: kamera 2,5 m + fokus = jarak,
+#     tangan EVA masuk frame?
+#   - S6b scar_wave, Blender 1160-1183: hero (bukan duplikat) di foreground?
+#   - S7a ECU mata, Blender 1221-1244: fokus = jarak (1,55->2,2)?
+#   - S8a langkah, Blender 1321-1344: hero terpisah dari barisan?
+#   - S8b akhir, Blender 1416-1439: emisi dinding ikut dim -> hitam?
+#   - 9:16 540x960 lensk 0.62 saja. Ronde 2: 44833187385 (144/144, S3/S4/S6b/
+#     S8a LOLOS, S6a blur total, S8b akhir mentok mean 86).
 on:
   workflow_dispatch:
 
@@ -22,14 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { fmt: "9x16", seg: "s3-01", res_x: 540, res_y: 960, lensk: "0.62", start: 540, end: 545 }
-          - { fmt: "9x16", seg: "s3-02", res_x: 540, res_y: 960, lensk: "0.62", start: 546, end: 551 }
-          - { fmt: "9x16", seg: "s3-03", res_x: 540, res_y: 960, lensk: "0.62", start: 552, end: 557 }
-          - { fmt: "9x16", seg: "s3-04", res_x: 540, res_y: 960, lensk: "0.62", start: 558, end: 563 }
-          - { fmt: "9x16", seg: "s4-01", res_x: 540, res_y: 960, lensk: "0.62", start: 620, end: 625 }
-          - { fmt: "9x16", seg: "s4-02", res_x: 540, res_y: 960, lensk: "0.62", start: 626, end: 631 }
-          - { fmt: "9x16", seg: "s4-03", res_x: 540, res_y: 960, lensk: "0.62", start: 632, end: 637 }
-          - { fmt: "9x16", seg: "s4-04", res_x: 540, res_y: 960, lensk: "0.62", start: 638, end: 643 }
+          - { fmt: "9x16", seg: "s4c-01", res_x: 540, res_y: 960, lensk: "0.62", start: 800, end: 805 }
+          - { fmt: "9x16", seg: "s4c-02", res_x: 540, res_y: 960, lensk: "0.62", start: 806, end: 811 }
+          - { fmt: "9x16", seg: "s4c-03", res_x: 540, res_y: 960, lensk: "0.62", start: 812, end: 817 }
+          - { fmt: "9x16", seg: "s4c-04", res_x: 540, res_y: 960, lensk: "0.62", start: 818, end: 823 }
           - { fmt: "9x16", seg: "s6a-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1080, end: 1085 }
           - { fmt: "9x16", seg: "s6a-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1086, end: 1091 }
           - { fmt: "9x16", seg: "s6a-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1092, end: 1097 }
@@ -38,6 +35,10 @@ jobs:
           - { fmt: "9x16", seg: "s6b-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1166, end: 1171 }
           - { fmt: "9x16", seg: "s6b-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1172, end: 1177 }
           - { fmt: "9x16", seg: "s6b-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1178, end: 1183 }
+          - { fmt: "9x16", seg: "s7a-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1221, end: 1226 }
+          - { fmt: "9x16", seg: "s7a-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1227, end: 1232 }
+          - { fmt: "9x16", seg: "s7a-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1233, end: 1238 }
+          - { fmt: "9x16", seg: "s7a-04", res_x: 540, res_y: 960, lensk: "0.62", start: 1239, end: 1244 }
           - { fmt: "9x16", seg: "s8a-01", res_x: 540, res_y: 960, lensk: "0.62", start: 1321, end: 1326 }
           - { fmt: "9x16", seg: "s8a-02", res_x: 540, res_y: 960, lensk: "0.62", start: 1327, end: 1332 }
           - { fmt: "9x16", seg: "s8a-03", res_x: 540, res_y: 960, lensk: "0.62", start: 1333, end: 1338 }
